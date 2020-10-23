@@ -17,6 +17,10 @@
     <img alt="Twitter: koromerzhin" src="https://img.shields.io/twitter/follow/koromerzhin.svg?style=social" target="_blank" />
   </a>
 
+  ![Continuous Integration](https://github.com/koromerzhin/traefikproxy/workflows/Continuous%20Integration/badge.svg?branch=develop)
+
+  ![docker](https://github.com/koromerzhin/traefikproxy/workflows/docker/badge.svg?branch=develop)
+  
   [![DepShield Badge](https://depshield.sonatype.org/badges/koromerzhin/traefikproxy/depshield.svg)](https://depshield.github.io)
 </p>
 
