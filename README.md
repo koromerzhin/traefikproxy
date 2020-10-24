@@ -33,6 +33,7 @@
 Software :
 - make
 - docker
+- npm
 
 Config :
 
