@@ -50,13 +50,9 @@ docker-showstack: ## Show stack
 	@make docker-stack-ps -i
 	@make docker-service-ls -i
 
-
 git-commit: node_modules ## Commit data
 	npm run commit
 
 git-check: node_modules ## CHECK before
 	@make contributors-check -i
 	@git status
-
-sleep: ## sleep
-	@sleep 60

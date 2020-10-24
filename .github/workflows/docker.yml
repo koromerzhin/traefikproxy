@@ -11,5 +11,4 @@ jobs:
             - {name: 'Show HELP', run: 'make help'}
             - {name: 'Build containers', run: 'make docker-deploy'}
             - {name: 'Check running stack', run: 'make docker-stack-ps'}
-            - {name: 'Make sleep', run: 'make sleep'}
             - {name: 'Check running containers', run: 'make docker-service-ls'}
