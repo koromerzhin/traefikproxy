@@ -50,6 +50,9 @@ docker-showstack: ## Show stack
 	@make docker-stack-ps -i
 	@make docker-service-ls -i
 
+linter-readme: node_modules ## linter README.md
+	@npm run linter-markdown README.md
+
 git-commit: node_modules ## Commit data
 	npm run commit
 
