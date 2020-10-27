@@ -35,7 +35,7 @@ docker-deploy: ## deploy
 	docker stack deploy -c docker-compose.yml $(STACK)
 
 docker-image-pull: ## Get docker image
-	docker image pull traefik:v2.2.0
+	docker image pull traefik:2.3.2
 
 docker-logs: ## logs docker
 	docker service logs -f --tail 100 --raw $(PROXYFULLNAME)
