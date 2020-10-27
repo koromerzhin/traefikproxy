@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/koromerzhin/traefikproxy#readme",
   "scripts": {
+    "linter-markdown": "markdownlint",
     "contributors": "all-contributors",
     "changelog": "gitmoji-changelog",
     "readme": "readme",
@@ -29,5 +30,7 @@
     "readme-md-generator": "1.0.0",
     "semantic-git-commit-cli": "3.7.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "markdownlint": "^0.21.1"
+  }
 }
