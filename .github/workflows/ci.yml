@@ -30,7 +30,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
   linter:
-    need: install
+    needs: install
     steps:
       - name: linter readme
         run: make linter-readme
