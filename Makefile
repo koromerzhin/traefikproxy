@@ -15,7 +15,6 @@ node_modules:
 	npm install
 
 install: node_modules ## Installation application
-	@make docker-image-pull
 	@make docker-create-network -i
 	@make docker-deploy -i
 
