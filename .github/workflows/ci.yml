@@ -36,5 +36,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: linter readme
         run: make linter-readme
