@@ -1,4 +1,4 @@
-#  Welcome to @koromerzhin/traefikproxy 👋
+# Welcome to @koromerzhin/traefikproxy 👋
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
 
