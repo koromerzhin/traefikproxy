@@ -55,6 +55,12 @@ make git-check
 make git-commit
 ```
 
+## Help
+
+```sh
+make help
+```
+
 ## Author
 
 👤 **koromerzhin**
