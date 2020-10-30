@@ -1,7 +1,7 @@
 name: Continuous Integration
 on: [push]
 jobs:
-  environnement:
+  tests:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       fail-fast: false
@@ -25,32 +25,11 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-  install:
-    needs: environnement
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Install npm dependencies
         run: npm install
-  linter:
-    needs: install
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: linter readme
         run: make linter-readme
   docker:
-    needs: install
     runs-on: ubuntu-latest
     steps:
         - name: Checkout
@@ -64,8 +43,4 @@ jobs:
         - name: 'Build containers'
           run: make docker-deploy
         - name: 'Check running stack'
-          run: docker stack ls
-        - name: 'Installation version PROD'
-          run: make env-prod
-        - name: 'Check running containers'
-          run: docker service ls
+          run: docker docker-ls
