@@ -42,6 +42,9 @@ docker-logs: ## logs docker
 docker-ls: ## docker service
 	@docker stack services $(STACK)
 
+docker-stop: ## docker stop
+	@docker stack rm $(STACK)
+
 linter-readme: node_modules ## linter README.md
 	@npm run linter-markdown README.md
 
