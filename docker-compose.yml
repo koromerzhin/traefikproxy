@@ -11,7 +11,7 @@ volumes:
 services:
   traefik:
     # The official v2 Traefik docker image
-    image: traefik:2.3.6
+    image: traefik:2.3.7
     # Enables the web UI and tells Traefik to listen to docker
     ports:
       - "80:80"
