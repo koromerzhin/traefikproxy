@@ -69,7 +69,7 @@ ifeq ($(COMMAND_ARGS),create-network)
 else ifeq ($(COMMAND_ARGS),deploy)
 	@docker stack deploy -c docker-compose.yml $(STACK)
 else ifeq ($(COMMAND_ARGS),image-pull)
-	@docker image pull koromerzhin/angular:latest
+	@docker image pull traefik:2.3.7
 else ifeq ($(COMMAND_ARGS),ls)
 	@docker stack services $(STACK)
 else ifeq ($(COMMAND_ARGS),stop)
