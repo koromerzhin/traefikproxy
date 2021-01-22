@@ -1,45 +1,45 @@
-version: '3'
+version: "3"
 
 networks:
-    proxynetwork:
-        driver: overlay
-        external: true
+  proxynetwork:
+    driver: overlay
+    external: true
 
 volumes:
-    letsencrypt:
+  letsencrypt:
 
 services:
-    traefik:
-        # The official v2 Traefik docker image
-        image: traefik:v2.2.0
-        # Enables the web UI and tells Traefik to listen to docker
-        ports:
-            - "80:80"
-            - "443:443"
-        command:
-            - --api.insecure=true # set to 'false' on production
-            - --api.dashboard=true # see https://docs.traefik.io/v2.0/operations/dashboard/#secure-mode for how to secure the dashboard
-            - --api.debug=true # enable additional endpoints for debugging and profiling
-            - --log.level=DEBUG # debug while we get it working, for more levels/info see https://docs.traefik.io/observability/logs/
-            - --providers.docker=true
-            - --providers.docker.swarmMode=true
-            - --providers.docker.exposedbydefault=false
-            - --providers.docker.network=proxynetwork
-            - --entrypoints.web.address=:80
-            - --entrypoints.web-secured.address=:443
-        networks:
-            - proxynetwork
-        volumes:
-            # So that Traefik can listen to the Docker events
-            - ${PWD}/letsencrypt:/letsencrypt
-            - /var/run/docker.sock:/var/run/docker.sock
-            - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
-        deploy:
-            placement:
-                constraints:
-                    - node.role == manager
-            labels:
-                - "traefik.enable=true"
-                - "traefik.http.routers.reverseproxy.rule=Host(`traefik.lxc`)"
-                - "traefik.http.services.reverseproxy.loadbalancer.server.port=8080"
-                - "traefik.http.routers.reverseproxy.entrypoints=web"
+  traefik:
+    # The official v2 Traefik docker image
+    image: traefik:2.3.7
+    # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - --api.insecure=true # set to 'false' on production
+      - --api.dashboard=true # see https://docs.traefik.io/v2.0/operations/dashboard/#secure-mode for how to secure the dashboard
+      - --api.debug=true # enable additional endpoints for debugging and profiling
+      - --log.level=DEBUG # debug while we get it working, for more levels/info see https://docs.traefik.io/observability/logs/
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=proxynetwork
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secured.address=:443
+    networks:
+      - proxynetwork
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - ${PWD}/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.reverseproxy.rule=Host(`traefik.lxc`)"
+        - "traefik.http.services.reverseproxy.loadbalancer.server.port=8080"
+        - "traefik.http.routers.reverseproxy.entrypoints=web"
