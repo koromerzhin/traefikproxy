@@ -119,3 +119,9 @@ endif
 
 ssh: ## SSH
 	@docker exec -it $(PROXYFULLNAME) /bin/bash
+
+inspect: ## inspect
+	@docker service inspect $(WWW)
+
+update: ## update
+	@docker service update $(WWW)
