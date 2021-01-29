@@ -1,7 +1,7 @@
 version: "3"
 
 networks:
-  proxynetwork:
+  proxyhackariens:
     driver: overlay
     external: true
 
@@ -24,11 +24,11 @@ services:
       - --providers.docker=true
       - --providers.docker.swarmMode=true
       - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=proxynetwork
+      - --providers.docker.network=proxyhackariens
       - --entrypoints.web.address=:80
       - --entrypoints.web-secured.address=:443
     networks:
-      - proxynetwork
+      - proxyhackariens
     volumes:
       # So that Traefik can listen to the Docker events
       - ${PWD}/letsencrypt:/letsencrypt
