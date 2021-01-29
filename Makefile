@@ -19,10 +19,10 @@ help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 package-lock.json: package.json
-	npm install
+	@npm install
 
 node_modules: package-lock.json
-	npm install
+	@npm install
 
 install: node_modules ## Installation application
 	@make docker create-network -i
@@ -40,13 +40,13 @@ else
 endif
 
 docker-create-network: ## Create network
-	docker network create --driver=overlay $(NETWORK)
+	@docker network create --driver=overlay $(NETWORK)
 
 docker-deploy: ## deploy
-	docker stack deploy -c docker-compose.yml $(STACK)
+	@docker stack deploy -c docker-compose.yml $(STACK)
 
 docker-image-pull: ## Get docker image
-	docker image pull traefik:2.3.7
+	@docker image pull traefik:2.3.7
 
 
 logs: ## Scripts logs
@@ -121,7 +121,7 @@ ssh: ## SSH
 	@docker exec -it $(PROXYFULLNAME) /bin/bash
 
 inspect: ## inspect
-	@docker service inspect $(WWW)
+	@docker service inspect $(PROXY)
 
 update: ## update
-	@docker service update $(WWW)
+	@docker service update $(PROXY)
