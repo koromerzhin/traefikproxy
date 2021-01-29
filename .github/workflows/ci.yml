@@ -23,6 +23,8 @@ jobs:
         run: make node_modules
       - name: linter readme
         run: make linter readme
+      - name: Create folder
+        run: make folders
       - name: 'Docker swarm init'
         run: docker swarm init --default-addr-pool 10.20.0.0/16
       - name: 'récupération des images'

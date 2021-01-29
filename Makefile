@@ -25,8 +25,12 @@ node_modules: package-lock.json
 	@npm install
 
 install: node_modules ## Installation application
+	@make folders -i
 	@make docker create-network -i
 	@make docker deploy -i
+
+folders: ## creation des dossier
+	@mkdir letsencrypt
 
 contributors: ## Contributors
 ifeq ($(COMMAND_ARGS),add)
