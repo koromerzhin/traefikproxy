@@ -6,9 +6,14 @@ networks:
     external: true
 
 volumes:
-  letsencrypt:
+  certs:
 
 services:
+  reverse:
+    image: alpine
+    command: sh -c "cd /etc/ssl/traefik && wget traefik.me/cert.pem -O cert.pem && wget traefik.me/privkey.pem -O privkey.pem"
+    volumes:
+      - certs:/etc/ssl/traefik
   traefik:
     # The official v2 Traefik docker image
     image: traefik:2.3.7
@@ -33,13 +38,16 @@ services:
       # So that Traefik can listen to the Docker events
       - ${PWD}/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
+      - ${PWD}/conf/traefik.toml:/etc/traefik/traefik.toml
+      - ${PWD}/conf/tls.yml:/etc/traefik/tls.yml
+      - certs:/etc/ssl/traefik
     deploy:
       placement:
         constraints:
           - node.role == manager
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.reverseproxy.rule=Host(`traefik.lxc`)"
-        - "traefik.http.services.reverseproxy.loadbalancer.server.port=8080"
-        - "traefik.http.routers.reverseproxy.entrypoints=web"
+        - "traefik.http.routers.proxy.rule=Host(`proxy.traefik.me`)"
+        - "traefik.http.routers.proxy-tls.tls.domains[0].main=proxy.traefik.me"
+        - "traefik.http.routers.proxy-tls.tls.domains[0].sans=proxy-*.traefik.me"
+        - "traefik.http.services.proxy.loadbalancer.server.port=8080"

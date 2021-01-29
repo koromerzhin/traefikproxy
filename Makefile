@@ -6,7 +6,11 @@ STACK         := proxy
 PROXY         := $(STACK)_traefik
 PROXYFULLNAME := $(PROXY).1.$$(docker service ps -f 'name=$(PROXY)' $(PROXY) -q --no-trunc | head -n1)
 
-SUPPORTED_COMMANDS := contributors git docker linter logs
+
+REVERSE         := $(STACK)_reverse
+REVERSEFULLNAME := $(REVERSE).1.$$(docker service ps -f 'name=$(REVERSE)' $(REVERSE) -q --no-trunc | head -n1)
+
+SUPPORTED_COMMANDS := contributors git docker linter logs ssh inspect update
 SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
 ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -43,28 +47,21 @@ else
 	@npm run contributors
 endif
 
-docker-create-network: ## Create network
-	@docker network create --driver=overlay $(NETWORK)
-
-docker-deploy: ## deploy
-	@docker stack deploy -c docker-compose.yml $(STACK)
-
-docker-image-pull: ## Get docker image
-	@docker image pull traefik:2.3.7
-
-
 logs: ## Scripts logs
 ifeq ($(COMMAND_ARGS),stack)
 	@docker service logs -f --tail 100 --raw $(STACK)
 else ifeq ($(COMMAND_ARGS),proxy)
 	@docker service logs -f --tail 100 --raw $(PROXYFULLNAME)
+else ifeq ($(COMMAND_ARGS),reverse)
+	@docker service logs -f --tail 100 --raw $(REVERSEFULLNAME)
 else
 	@echo "ARGUMENT missing"
 	@echo "---"
 	@echo "make logs ARGUMENT"
 	@echo "---"
 	@echo "stack: logs stack"
-	@echo "proxy: proxy"
+	@echo "proxy: PROXY"
+	@echo "reverse: REVERSE"
 endif
 
 docker: ## Scripts docker
@@ -73,6 +70,7 @@ ifeq ($(COMMAND_ARGS),create-network)
 else ifeq ($(COMMAND_ARGS),deploy)
 	@docker stack deploy -c docker-compose.yml $(STACK)
 else ifeq ($(COMMAND_ARGS),image-pull)
+	@docker image pull alpine
 	@docker image pull traefik:2.3.7
 else ifeq ($(COMMAND_ARGS),ls)
 	@docker stack services $(STACK)
@@ -120,12 +118,44 @@ else
 	@echo "check: CHECK before"
 endif
 
-
-ssh: ## SSH
-	@docker exec -it $(PROXYFULLNAME) /bin/bash
+ssh: ## ssh
+ifeq ($(COMMAND_ARGS),proxy)
+	@docker exec -it $(PROXYFULLNAME) sh
+else ifeq ($(COMMAND_ARGS),reverse)
+	@docker exec -it $(REVERSEFULLNAME) /bin/bash
+else
+	@echo "ARGUMENT missing"
+	@echo "---"
+	@echo "make ssh ARGUMENT"
+	@echo "---"
+	@echo "proxy: PROXY"
+	@echo "reverse: REVERSE"
+endif
 
 inspect: ## inspect
+ifeq ($(COMMAND_ARGS),proxy)
 	@docker service inspect $(PROXY)
+else ifeq ($(COMMAND_ARGS),reverse)
+	@docker service inspect $(REVERSE)
+else
+	@echo "ARGUMENT missing"
+	@echo "---"
+	@echo "make inspect ARGUMENT"
+	@echo "---"
+	@echo "proxy: PROXY"
+	@echo "reverse: REVERSE"
+endif
 
 update: ## update
+ifeq ($(COMMAND_ARGS),proxy)
 	@docker service update $(PROXY)
+else ifeq ($(COMMAND_ARGS),reverse)
+	@docker service update $(REVERSE)
+else
+	@echo "ARGUMENT missing"
+	@echo "---"
+	@echo "make update ARGUMENT"
+	@echo "---"
+	@echo "proxy: PROXY"
+	@echo "reverse: REVERSE"
+endif

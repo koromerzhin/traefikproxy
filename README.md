@@ -30,7 +30,7 @@ Config:
 
 Hosts:
 
-- 127.0.0.1 traefik.lxc
+- proxy.traefik.me
 
 ## Install
 
