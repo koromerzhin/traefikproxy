@@ -14,6 +14,9 @@ services:
     command: sh -c "cd /etc/ssl/traefik && wget traefik.me/cert.pem -O cert.pem && wget traefik.me/privkey.pem -O privkey.pem"
     volumes:
       - certs:/etc/ssl/traefik
+    deploy:
+      labels:
+        - "traefik.enable=false"
   traefik:
     # The official v2 Traefik docker image
     image: traefik:2.3.7
