@@ -1,3 +1,5 @@
+isDocker := $(shell docker info > /dev/null 2>&1 && echo 1)
+
 .DEFAULT_GOAL := help
 
 NETWORK       := proxynetwork
@@ -16,9 +18,8 @@ ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   $(eval $(COMMAND_ARGS):;@:)
 endif
-%:
-	@:
 
+.PHONY: help
 help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
@@ -28,15 +29,24 @@ package-lock.json: package.json
 node_modules: package-lock.json
 	@npm install
 
+isdocker: ## Docker is launch
+ifeq ($(isDocker), 0)
+	@echo "Docker is not launch"
+	exit 1
+endif
+
+.PHONY: install
 install: node_modules ## Installation application
 	@make folders -i
 	@make docker create-network -i
 	@make docker deploy -i
 
+.PHONY: folders
 folders: ## creation des dossier
 	@mkdir letsencrypt
 
-contributors: ## Contributors
+.PHONY: contributors
+contributors: node_modules ## Contributors
 ifeq ($(COMMAND_ARGS),add)
 	@npm run contributors add
 else ifeq ($(COMMAND_ARGS),check)
@@ -47,7 +57,8 @@ else
 	@npm run contributors
 endif
 
-logs: ## Scripts logs
+.PHONY: logs
+logs: isdocker ## Scripts logs
 ifeq ($(COMMAND_ARGS),stack)
 	@docker service logs -f --tail 100 --raw $(STACK)
 else ifeq ($(COMMAND_ARGS),proxy)
@@ -64,7 +75,8 @@ else
 	@echo "reverse: REVERSE"
 endif
 
-docker: ## Scripts docker
+.PHONY: docker
+docker: isdocker ## Scripts docker
 ifeq ($(COMMAND_ARGS),create-network)
 	@docker network create --driver=overlay $(NETWORK)
 else ifeq ($(COMMAND_ARGS),deploy)
@@ -88,7 +100,8 @@ else
 	@echo "stop: docker stop"
 endif
 
-linter: ## Scripts Linter
+.PHONY: linter
+linter: node_modules ## Scripts Linter
 ifeq ($(COMMAND_ARGS),all)
 	@make linter readme -i
 else ifeq ($(COMMAND_ARGS),readme)
@@ -102,7 +115,8 @@ else
 	@echo "readme: linter README.md"
 endif
 
-git: ## Scripts GIT
+.PHONY: git
+git: node_modules ## Scripts GIT
 ifeq ($(COMMAND_ARGS),commit)
 	@npm run commit
 else ifeq ($(COMMAND_ARGS),check)
@@ -118,7 +132,8 @@ else
 	@echo "check: CHECK before"
 endif
 
-ssh: ## ssh
+.PHONY: ssh
+ssh: isdocker ## ssh
 ifeq ($(COMMAND_ARGS),proxy)
 	@docker exec -it $(PROXYFULLNAME) sh
 else ifeq ($(COMMAND_ARGS),reverse)
@@ -132,7 +147,8 @@ else
 	@echo "reverse: REVERSE"
 endif
 
-inspect: ## inspect
+.PHONY: inspect
+inspect: isdocker ## inspect
 ifeq ($(COMMAND_ARGS),proxy)
 	@docker service inspect $(PROXY)
 else ifeq ($(COMMAND_ARGS),reverse)
@@ -146,7 +162,8 @@ else
 	@echo "reverse: REVERSE"
 endif
 
-update: ## update
+.PHONY: update
+update: isdocker ## update
 ifeq ($(COMMAND_ARGS),proxy)
 	@docker service update $(PROXY)
 else ifeq ($(COMMAND_ARGS),reverse)
