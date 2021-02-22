@@ -84,7 +84,7 @@ else ifeq ($(COMMAND_ARGS),deploy)
 	@docker stack deploy -c docker-compose.yml $(STACK)
 else ifeq ($(COMMAND_ARGS),image-pull)
 	@docker image pull alpine
-	@docker image pull traefik:2.3.7
+	@docker image pull traefik:2.4.5
 else ifeq ($(COMMAND_ARGS),ls)
 	@docker stack services $(STACK)
 else ifeq ($(COMMAND_ARGS),stop)
