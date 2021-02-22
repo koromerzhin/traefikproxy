@@ -33,5 +33,3 @@ jobs:
         run: make node_modules
       - name: linter readme
         run: make linter readme
-      - name: Create folder
-        run: make folders
