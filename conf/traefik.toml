@@ -6,6 +6,9 @@
     exposedByDefault = true
     swarmMode = true
     network = "proxynetwork"
+    endpoint = "unix:///var/run/docker.sock"
+    watch = true
+    defaultRule = "HostRegexp(`{{ index .Labels \"com.docker.compose.service\"}}.traefik.me`,`{{ index .Labels \"com.docker.compose.service\"}}-{dashed-ip:.*}.traefik.me`)"
 [entryPoints]
     [entryPoints.web]
         address = ":80"

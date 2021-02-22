@@ -6,10 +6,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest]
+        operating-system: [ubuntu-20.04]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: 'Docker swarm init'
+        run: docker swarm init --default-addr-pool 10.20.0.0/16
+      - name: 'Create proxy network'
+        run: make docker create-network
+      - name: 'image pull'
+        run: make docker image-pull
+      - name: Create folder
+        run: make folders
+      - name: 'Build containers'
+        run: make docker deploy
       - name: Cache npm packages
         id: npm-cache
         uses: actions/cache@v2
@@ -23,13 +33,3 @@ jobs:
         run: make node_modules
       - name: linter readme
         run: make linter readme
-      - name: 'Docker swarm init'
-        run: docker swarm init --default-addr-pool 10.20.0.0/16
-      - name: 'récupération des images'
-        run: make docker image-pull
-      - name: 'Create proxy network'
-        run: make docker create-network
-      - name: 'Build containers'
-        run: make docker-deploy
-      - name: 'Check running stack'
-        run: make docker ls
