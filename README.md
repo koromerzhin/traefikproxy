@@ -10,7 +10,9 @@
 ## 🏠 [Homepage](https://github.com/koromerzhin/traefikproxy#readme)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#-contributors)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Need
@@ -23,7 +25,7 @@ Software:
 
 Config:
 
- docker swarm
+docker swarm
 
 Hosts:
 
@@ -64,10 +66,9 @@ make help
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!
-Feel free to check
-[issues page](https://github.com/koromerzhin/traefikproxy/issues).
-You can also take a look at the
+Contributions, issues and feature requests are welcome! Feel free to check
+[issues page](https://github.com/koromerzhin/traefikproxy/issues). You can also
+take a look at the
 [contributing guide](https://github.com/koromerzhin/traefikproxy/blob/develop/CONTRIBUTING.md).
 
 ## Show your support
@@ -79,7 +80,8 @@ Give a ⭐️ if this project helped you!
 Copyright © 2019 [koromerzhin](https://github.com/koromerzhin).
 
 This project is
-[MIT](https://github.com/koromerzhin/traefikproxy/blob/develop/LICENSE) licensed.
+[MIT](https://github.com/koromerzhin/traefikproxy/blob/develop/LICENSE)
+licensed.
 
 ## ✨ Contributors
 
