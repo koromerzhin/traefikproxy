@@ -12,7 +12,7 @@ PROXYFULLNAME := $(PROXY).1.$$(docker service ps -f 'name=$(PROXY)' $(PROXY) -q 
 REVERSE         := $(STACK)_reverse
 REVERSEFULLNAME := $(REVERSE).1.$$(docker service ps -f 'name=$(REVERSE)' $(REVERSE) -q --no-trunc | head -n1)
 
-SUPPORTED_COMMANDS := contributors git docker linter logs ssh inspect update
+SUPPORTED_COMMANDS := contributors git docker linter logs ssh inspect update sleep
 SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
 ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -35,6 +35,10 @@ ifeq ($(isDocker), 0)
 	@echo "Docker is not launch"
 	exit 1
 endif
+
+.PHONY: sleep
+sleep: ## sleep
+	@sleep  $(COMMAND_ARGS)
 
 .PHONY: install
 install: node_modules ## Installation application
