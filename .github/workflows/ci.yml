@@ -10,6 +10,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Cache npm packages
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: make node_modules
       - name: 'Docker swarm init'
         run: docker swarm init --default-addr-pool 10.20.0.0/16
       - name: 'Create proxy network'
@@ -22,16 +33,5 @@ jobs:
         run: make sleep 60
       - name: 'docker ls'
         run: make docker ls
-      - name: Cache npm packages
-        id: npm-cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install npm dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: make node_modules
       - name: linter readme
         run: make linter readme
