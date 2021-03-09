@@ -2,7 +2,10 @@
     dashboard = true
     debug = true
     insecure = true
-[providers.docker]
+[providers]
+    [providers.file]
+    filename = "/etc/traefik/tls.yml"
+    [providers.docker]
     exposedByDefault = true
     swarmMode = true
     network = "proxynetwork"

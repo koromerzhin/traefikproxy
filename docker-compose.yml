@@ -15,6 +15,8 @@ services:
     volumes:
       - certs:/etc/ssl/traefik
     deploy:
+      restart_policy:
+        condition: none
       labels:
         - "traefik.enable=false"
   traefik:
