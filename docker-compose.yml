@@ -52,7 +52,7 @@ services:
           - node.role == manager
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.proxy.rule=Host(`proxy.traefik.me`)"
+        - "traefik.http.routers.proxy.rule=HostRegexp(`proxy.traefik.me`, `proxy.{ip:.*}.traefik.me`)"
         - "traefik.http.routers.proxy-tls.tls.domains[0].main=proxy.traefik.me"
         - "traefik.http.routers.proxy-tls.tls.domains[0].sans=proxy-*.traefik.me"
         - "traefik.http.services.proxy.loadbalancer.server.port=8080"
