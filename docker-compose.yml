@@ -21,7 +21,7 @@ services:
         - "traefik.enable=false"
   traefik:
     # The official v2 Traefik docker image
-    image: traefik:v2.4.8
+    image: traefik:v2.4.11
     # Enables the web UI and tells Traefik to listen to docker
     ports:
       - "80:80"
